@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::prefix('posts')->group(function () {
+    require __DIR__ . '/web/posts.php';
+});
