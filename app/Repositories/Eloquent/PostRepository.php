@@ -64,13 +64,15 @@ class PostRepository implements PostRepositoryInterface
             }
         }
 
-        $postEntity = new Entities\Post([
-            'id' => $post->getAttribute('id'),
-            'status' => $post->getAttribute('status'),
-            'title' => $post->getAttribute('title'),
-            'body' => $post->getAttribute('body'),
-            'comments' => $comments,
-        ]);
+        $postEntity = Entities\Post::reConstruct(
+            $post->getAttribute('id'),
+            $post->getAttribute('title'),
+            $post->getAttribute('body'),
+            $post->getAttribute('status'),
+            $comments,
+            $post->getAttribute('created_at'),
+            $post->getAttribute('updated_at'),
+        );
         $postEntityCollection->push($postEntity);
 
         return $postEntityCollection;
@@ -85,13 +87,15 @@ class PostRepository implements PostRepositoryInterface
      */
     private function toCommentDomainEntity(Comment $comment, Collection $commentEntityCollection)
     {
-        $commentEntity = new Entities\Comment([
-            'id' => $comment->getAttribute('id'),
-            'postId' => $comment->getAttribute('post_id'),
-            'status' => $comment->getAttribute('status'),
-            'title' => $comment->getAttribute('title'),
-            'body' => $comment->getAttribute('body'),
-        ]);
+        $commentEntity = Entities\Comment::reConstruct(
+            $comment->getAttribute('id'),
+            $comment->getAttribute('post_id'),
+            $comment->getAttribute('title'),
+            $comment->getAttribute('body'),
+            $comment->getAttribute('status'),
+            $comment->getAttribute('created_at'),
+            $comment->getAttribute('updated_at'),
+        );
         $commentEntityCollection->push($commentEntity);
 
         return $commentEntityCollection;

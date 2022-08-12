@@ -2,13 +2,65 @@
 
 namespace App\Domain\Entities;
 
+use Illuminate\Support\Carbon;
+use JetBrains\PhpStorm\Pure;
+
 class Comment extends DomainEntity
 {
-    protected $id;
-    protected $postId;
-    protected $title;
-    protected $body;
-    protected $status;
+    const UNAPPROVED = 0;
+    const APPROVED = 1;
+    const REJECTED = 2;
+
+    protected int $id;
+    protected int $postId;
+    protected string $title;
+    protected string $body;
+    protected string $status;
+
+    /**
+     * 新規のコメントを作成する
+     *
+     * @param int $postId
+     * @param string $title
+     * @param string $body
+     * @return Comment
+     */
+    public static function create(int $postId, string $title, string $body): Comment
+    {
+        return new Comment([
+            'postId' => $postId,
+            'title' => $title,
+            'body' => $body,
+            'status' => self::UNAPPROVED,
+            'createdAt' => Carbon::now(),
+            'updatedAt' => Carbon::now(),
+        ]);
+    }
+
+    /**
+     * DBなどの既存データからインスタンスを再構成する
+     *
+     * @param int $id
+     * @param int $postId
+     * @param string $title
+     * @param string $body
+     * @param int $status
+     * @param Carbon $createdAt
+     * @param Carbon $updatedAt
+     * @return Comment
+     */
+    #[Pure] public static function reConstruct(int $id, int $postId, string $title, string $body, int $status, Carbon $createdAt, Carbon $updatedAt): Comment
+    {
+        return new Comment([
+            'id' => $id,
+            'postId' => $postId,
+            'title' => $title,
+            'body' => $body,
+            'status' => $status,
+            'createdAt' => $createdAt,
+            'updatedAt' => $updatedAt,
+        ]);
+    }
 
     public function __get($key)
     {

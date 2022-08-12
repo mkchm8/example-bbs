@@ -2,13 +2,69 @@
 
 namespace App\Domain\Entities;
 
+use App\Domain\Entities\Values\Post\Status;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+use JetBrains\PhpStorm\Pure;
+
 class Post extends DomainEntity
 {
-    protected $id;
-    protected $title;
-    protected $body;
-    protected $status;
-    protected $comments;
+    const UNAPPROVED = 0;
+    const APPROVED = 1;
+    const REJECTED = 2;
+
+    private static Post $post;
+
+    protected int $id;
+    protected string $title;
+    protected string $body;
+    protected int $status;
+    protected Collection $comments;
+    protected Carbon $createdAt;
+    protected Carbon $updatedAt;
+
+    /**
+     * 新規の投稿を作成する
+     *
+     * @param string $title
+     * @param string $body
+     * @return Post
+     */
+    public static function create(string $title, string $body): Post
+    {
+        return new Post([
+            'title' => $title,
+            'body' => $body,
+            'status' => self::UNAPPROVED,
+            'createdAt' => Carbon::now(),
+            'updatedAt' => Carbon::now(),
+        ]);
+    }
+
+    /**
+     * DBなどの既存データからインスタンスを再構成する
+     *
+     * @param int $id
+     * @param string $title
+     * @param string $body
+     * @param int $status
+     * @param Collection $comments
+     * @param Carbon $createdAt
+     * @param Carbon $updatedAt
+     * @return Post
+     */
+    #[Pure] public static function reConstruct(int $id, string $title, string $body, int $status, Collection $comments, Carbon $createdAt, Carbon $updatedAt): Post
+    {
+        return new Post([
+            'id' => $id,
+            'title' => $title,
+            'body' => $body,
+            'status' => $status,
+            'comments' => $comments,
+            'createdAt' => $createdAt,
+            'updatedAt' => $updatedAt,
+        ]);
+    }
 
     public function __get($key)
     {
