@@ -2,13 +2,65 @@
 
 namespace App\Domain\Entities;
 
+use Illuminate\Support\Carbon;
+use JetBrains\PhpStorm\Pure;
+
 class Comment extends DomainEntity
 {
-    private $id;
-    private $postId;
-    private $title;
-    private $body;
-    private $status;
+    const UNAPPROVED = 0;
+    const APPROVED = 1;
+    const REJECTED = 2;
+
+    protected int $id;
+    protected int $postId;
+    protected string $title;
+    protected string $body;
+    protected string $status;
+
+    /**
+     * 新規のコメントを作成する
+     *
+     * @param int $postId
+     * @param string $title
+     * @param string $body
+     * @return Comment
+     */
+    public static function create(int $postId, string $title, string $body): Comment
+    {
+        return new Comment([
+            'postId' => $postId,
+            'title' => $title,
+            'body' => $body,
+            'status' => self::UNAPPROVED,
+            'createdAt' => Carbon::now(),
+            'updatedAt' => Carbon::now(),
+        ]);
+    }
+
+    /**
+     * DBなどの既存データからインスタンスを再構成する
+     *
+     * @param int $id
+     * @param int $postId
+     * @param string $title
+     * @param string $body
+     * @param int $status
+     * @param Carbon $createdAt
+     * @param Carbon $updatedAt
+     * @return Comment
+     */
+    #[Pure] public static function reConstruct(int $id, int $postId, string $title, string $body, int $status, Carbon $createdAt, Carbon $updatedAt): Comment
+    {
+        return new Comment([
+            'id' => $id,
+            'postId' => $postId,
+            'title' => $title,
+            'body' => $body,
+            'status' => $status,
+            'createdAt' => $createdAt,
+            'updatedAt' => $updatedAt,
+        ]);
+    }
 
     public function __get($key)
     {
@@ -24,27 +76,11 @@ class Comment extends DomainEntity
     }
 
     /**
-     * @param mixed $id
-     */
-    public function setId($id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return mixed
      */
     public function getPostId()
     {
         return $this->postId;
-    }
-
-    /**
-     * @param mixed $postId
-     */
-    public function setPostId($postId): void
-    {
-        $this->postId = $postId;
     }
 
     /**
@@ -56,14 +92,6 @@ class Comment extends DomainEntity
     }
 
     /**
-     * @param mixed $title
-     */
-    public function setTitle($title): void
-    {
-        $this->title = $title;
-    }
-
-    /**
      * @return mixed
      */
     public function getBody()
@@ -72,26 +100,10 @@ class Comment extends DomainEntity
     }
 
     /**
-     * @param mixed $body
-     */
-    public function setBody($body): void
-    {
-        $this->body = $body;
-    }
-
-    /**
      * @return mixed
      */
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * @param mixed $status
-     */
-    public function setStatus($status): void
-    {
-        $this->status = $status;
     }
 }
