@@ -2,14 +2,11 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\DataAccess\Eloquent\EloquentModel;
+use App\DataAccess\Eloquent\Comment;
 use App\DataAccess\Eloquent\Post;
-use App\Domain\Entities\Comment as CommentEntity;
-use App\Domain\Entities\DomainEntity;
-use App\Domain\Entities\Post as PostEntity;
+use App\Domain\Entities;
 use App\Repositories\PostRepositoryInterface;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class PostRepository implements PostRepositoryInterface
 {
@@ -35,54 +32,68 @@ class PostRepository implements PostRepositoryInterface
         $posts = $this->post::with('comments')->get();
 
         $postEntityCollection = collect();
-        $this->toDomainEntity($posts, $postEntityCollection, new PostEntity());
-
         foreach ($posts as $post) {
             $comments = $post->comments()->get();
+
             $commentEntityCollection = collect();
-            if ($comments->isNotEmpty()) {
-                $this->toDomainEntity($comments, $commentEntityCollection, new CommentEntity());
+            foreach ($comments as $comment) {
+                $this->toCommentDomainEntity($comment, $commentEntityCollection);
             }
 
-            foreach ($postEntityCollection as $postEntity) {
-                if ($postEntity->id == $post->id) {
-                    $postEntity->setComments($commentEntityCollection);
-                }
-            }
+            $this->toPostDomainEntity($post, $postEntityCollection, $commentEntityCollection);
         }
 
         return $postEntityCollection;
     }
 
     /**
-     * Eloquentモデルをドメインエンティティに変換する
-     * TODO: setterをやめて値オブジェクトを導入する
+     * 投稿のEloquentモデルをドメインエンティティに変換する
      *
-     * @param \Illuminate\Database\Eloquent\Collection $eloquents
-     * @param Collection $domainEntityCollection
-     * @param DomainEntity $domainEntity
-     * @return void
+     * @param Post $post
+     * @param Collection $postEntityCollection
+     * @param Collection $commentEntityCollection
+     * @return Collection
      */
-    private function toDomainEntity(
-        \Illuminate\Database\Eloquent\Collection $eloquents,
-        Collection $domainEntityCollection,
-        DomainEntity $domainEntity
-    )
+    private function toPostDomainEntity(Post $post, Collection $postEntityCollection, Collection $commentEntityCollection)
     {
-        $attributes = $eloquents->first()->getAttributes();
-        $columns = array_keys($attributes);
-
-        /** @var EloquentModel $eloquent */
-        foreach ($eloquents as $eloquent) {
-            $entity = clone $domainEntity;
-            foreach ($columns as $column) {
-                $eloquent->getAttribute($column);
-                $setter = 'set' . Str::studly($column);
-                if (method_exists($entity, $setter)) {
-                    $entity->$setter($eloquent->getAttribute($column));
-                }
+        /** @var Post $post */
+        $comments = collect();
+        foreach ($commentEntityCollection as $commentEntity) {
+            if ($post->getAttribute('id') == $commentEntity->getPostId()) {
+                $comments = $commentEntityCollection;
             }
-            $domainEntityCollection->push($entity);
         }
+
+        $postEntity = new Entities\Post([
+            'id' => $post->getAttribute('id'),
+            'status' => $post->getAttribute('status'),
+            'title' => $post->getAttribute('title'),
+            'body' => $post->getAttribute('body'),
+            'comments' => $comments,
+        ]);
+        $postEntityCollection->push($postEntity);
+
+        return $postEntityCollection;
+    }
+
+    /**
+     * コメントのEloquentモデルをドメインエンティティに変換する
+     *
+     * @param Comment $comment
+     * @param Collection $commentEntityCollection
+     * @return Collection
+     */
+    private function toCommentDomainEntity(Comment $comment, Collection $commentEntityCollection)
+    {
+        $commentEntity = new Entities\Comment([
+            'id' => $comment->getAttribute('id'),
+            'postId' => $comment->getAttribute('post_id'),
+            'status' => $comment->getAttribute('status'),
+            'title' => $comment->getAttribute('title'),
+            'body' => $comment->getAttribute('body'),
+        ]);
+        $commentEntityCollection->push($commentEntity);
+
+        return $commentEntityCollection;
     }
 }

@@ -4,11 +4,11 @@ namespace App\Domain\Entities;
 
 class Post extends DomainEntity
 {
-    private $id;
-    private $title;
-    private $body;
-    private $status;
-    private $comments;
+    protected $id;
+    protected $title;
+    protected $body;
+    protected $status;
+    protected $comments;
 
     public function __get($key)
     {
@@ -24,27 +24,11 @@ class Post extends DomainEntity
     }
 
     /**
-     * @param mixed $id
-     */
-    public function setId($id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return mixed
      */
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * @param mixed $title
-     */
-    public function setTitle($title): void
-    {
-        $this->title = $title;
     }
 
     /**
@@ -56,14 +40,6 @@ class Post extends DomainEntity
     }
 
     /**
-     * @param mixed $body
-     */
-    public function setBody($body): void
-    {
-        $this->body = $body;
-    }
-
-    /**
      * @return mixed
      */
     public function getStatus()
@@ -71,13 +47,6 @@ class Post extends DomainEntity
         return $this->status;
     }
 
-    /**
-     * @param mixed $status
-     */
-    public function setStatus($status): void
-    {
-        $this->status = $status;
-    }
     /**
      * @return mixed
      */
