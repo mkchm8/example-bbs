@@ -16,6 +16,17 @@ class Post extends EloquentModel
     protected $fillable = ['status'];
 
     /**
+     * @param Builder $builder
+     * @param int $status
+     *
+     * @return Builder
+     */
+    public function scopeFilterStatus(Builder $builder, int $status): Builder
+    {
+        return $builder->where('status', $status);
+    }
+
+    /**
      * @return HasMany
      */
     public function comments(): HasMany
