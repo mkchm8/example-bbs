@@ -2,6 +2,8 @@
 
 namespace App\Usecases;
 
+use App\Domain\Entities\Comment;
+use App\Domain\Entities\Post;
 use App\Repositories\PostRepositoryInterface;
 use Illuminate\Support\Collection;
 
@@ -30,4 +32,18 @@ class PostApplicationService
     {
         return $this->postRepository->findListWithComments($inputs);
     }
+
+    /**
+     * 承認済みの投稿リストをコメント付きで取得する
+     *
+     * @return Collection
+     */
+    public function getApprovedListWithComments(): Collection
+    {
+        return $this->postRepository->findListWithComments([
+            'postStatus' => Post::APPROVED,
+            'commentStatus' => Comment::APPROVED,
+        ]);
+    }
+
 }

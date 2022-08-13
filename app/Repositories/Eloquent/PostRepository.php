@@ -29,7 +29,12 @@ class PostRepository implements PostRepositoryInterface
      */
     public function findListWithComments(array $conditions): Collection
     {
-        $posts = $this->post::with('comments')->get();
+        $posts = $this->post::with([
+            'comments' => function ($query) use ($conditions) {
+                $query->filterStatus($conditions['commentStatus']);
+            }])
+            ->filterStatus($conditions['postStatus'])
+            ->get();
 
         $postEntityCollection = collect();
         foreach ($posts as $post) {
