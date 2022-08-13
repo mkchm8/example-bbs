@@ -33,7 +33,7 @@ class PostRepository implements PostRepositoryInterface
 
         $postEntityCollection = collect();
         foreach ($posts as $post) {
-            $comments = $post->comments()->get();
+            $comments = $post->comments;
 
             $commentEntityCollection = collect();
             foreach ($comments as $comment) {
