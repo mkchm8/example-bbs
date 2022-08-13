@@ -22,7 +22,6 @@ class PostRepository implements PostRepositoryInterface
 
     /**
      * 投稿リストをコメント付きで取得する
-     * TODO: 条件による絞り込みができるようにする
      *
      * @param array $conditions
      * @return Collection
@@ -57,7 +56,6 @@ class PostRepository implements PostRepositoryInterface
      * @param Post $post
      * @param Collection $postEntityCollection
      * @param Collection $commentEntityCollection
-     * @return Collection
      */
     private function toPostDomainEntity(Post $post, Collection $postEntityCollection, Collection $commentEntityCollection)
     {
@@ -79,8 +77,6 @@ class PostRepository implements PostRepositoryInterface
             $post->getAttribute('updated_at'),
         );
         $postEntityCollection->push($postEntity);
-
-        return $postEntityCollection;
     }
 
     /**
@@ -88,7 +84,6 @@ class PostRepository implements PostRepositoryInterface
      *
      * @param Comment $comment
      * @param Collection $commentEntityCollection
-     * @return Collection
      */
     private function toCommentDomainEntity(Comment $comment, Collection $commentEntityCollection)
     {
@@ -102,7 +97,5 @@ class PostRepository implements PostRepositoryInterface
             $comment->getAttribute('updated_at'),
         );
         $commentEntityCollection->push($commentEntity);
-
-        return $commentEntityCollection;
     }
 }
