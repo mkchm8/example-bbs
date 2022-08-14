@@ -10,6 +10,7 @@ Route::prefix('posts')->group(function () {
     Route::prefix('/{post_id}')->where(['post_id' => '[0-9]{1,8}'])->group(function () {
         Route::prefix('/comments')->group(function () {
             Route::get('', [CommentController::class, 'create'])->name('web.post.comment.create');
+            Route::post('', [CommentController::class, 'store'])->name('web.post.comment.store');
         });
     });
 });

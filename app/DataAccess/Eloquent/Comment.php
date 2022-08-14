@@ -13,7 +13,7 @@ class Comment extends EloquentModel
     /**
      * @var string[]
      */
-    protected $fillable = ['title', 'body'];
+    protected $fillable = ['post_id', 'title', 'body', 'status'];
 
     /**
      * @param Builder $builder

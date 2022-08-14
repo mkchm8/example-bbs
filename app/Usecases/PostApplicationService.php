@@ -47,13 +47,16 @@ class PostApplicationService
     }
 
     /**
-     * 投稿をコメント付きで取得する
+     * 承認済み投稿をコメント付きで取得する
      *
      * @param int $postId
      * @return Post
      */
-    public function getByIdWithComments(int $postId): Post
+    public function getByIdWithApprovedComments(int $postId): Post
     {
-         return $this->postRepository->findByIdWithComments($postId);
+         return $this->postRepository->findByIdWithComments(
+             $postId,
+             ['commentStatus' => Comment::APPROVED]
+         );
     }
 }

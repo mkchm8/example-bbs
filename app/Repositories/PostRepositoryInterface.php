@@ -19,7 +19,8 @@ interface PostRepositoryInterface
      * 投稿をコメント付きで取得する
      *
      * @param int $postId
+     * @param ?array $conditions
      * @return Entities\Post
      */
-    public function findByIdWithComments(int $postId): Entities\Post;
+    public function findByIdWithComments(int $postId, ?array $conditions = null): Entities\Post;
 }

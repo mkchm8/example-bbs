@@ -22,6 +22,7 @@ class PostRepository implements PostRepositoryInterface
 
     /**
      * 投稿リストをコメント付きで取得する
+     * TODO: ステータス以外でも絞り込みできるようにする
      *
      * @param array $conditions
      * @return Collection
@@ -52,13 +53,20 @@ class PostRepository implements PostRepositoryInterface
 
     /**
      * 投稿をコメント付きで取得する
+     * TODO: ステータス以外でも絞り込みできるようにする
      *
      * @param int $postId
+     * @param ?array $conditions
      * @return Entities\Post
      */
-    public function findByIdWithComments(int $postId): Entities\Post
+    public function findByIdWithComments(int $postId, ?array $conditions = null): Entities\Post
     {
-        $post = $this->post::with(['comments'])->get()->find($postId);
+        $post = $this->post::with([
+            'comments' => function ($query) use ($conditions) {
+                if (isset($conditions['commentStatus'])) {
+                    $query->filterStatus($conditions['commentStatus']);
+                }
+            }])->get()->find($postId);
         $comments = $post->comments;
 
         $postEntityCollection = collect();
