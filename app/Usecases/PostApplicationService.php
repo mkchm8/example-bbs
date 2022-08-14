@@ -46,4 +46,14 @@ class PostApplicationService
         ]);
     }
 
+    /**
+     * 投稿をコメント付きで取得する
+     *
+     * @param int $postId
+     * @return Post
+     */
+    public function getByIdWithComments(int $postId): Post
+    {
+         return $this->postRepository->findByIdWithComments($postId);
+    }
 }

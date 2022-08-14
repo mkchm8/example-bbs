@@ -51,6 +51,28 @@ class PostRepository implements PostRepositoryInterface
     }
 
     /**
+     * 投稿をコメント付きで取得する
+     *
+     * @param int $postId
+     * @return Entities\Post
+     */
+    public function findByIdWithComments(int $postId): Entities\Post
+    {
+        $post = $this->post::with(['comments'])->get()->find($postId);
+        $comments = $post->comments;
+
+        $postEntityCollection = collect();
+        $commentEntityCollection = collect();
+        foreach ($comments as $comment) {
+            $this->toCommentDomainEntity($comment, $commentEntityCollection);
+        }
+
+        $this->toPostDomainEntity($post, $postEntityCollection, $commentEntityCollection);
+
+        return $postEntityCollection->first();
+    }
+
+    /**
      * 投稿のEloquentモデルをドメインエンティティに変換する
      *
      * @param Post $post

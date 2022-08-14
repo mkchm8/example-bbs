@@ -9,7 +9,7 @@
 
 @isset($posts)
     @foreach ($posts as $post)
-        <h2>Title: {{ $post->title }}</h2>
+        <h2>Title: <a href="{{ route('web.post.comment.create', [$post->id]) }}">{{ $post->title }}</a></h2>
         {{ $post->body }}<br>
         @foreach($post->comments as $comment)
             {{ $comment->title }}

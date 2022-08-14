@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\PostController;
+use App\Http\Controllers\Web\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +19,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('posts')->group(function () {
-    require __DIR__ . '/web/posts.php';
-});
+require __DIR__ . '/web/posts.php';
