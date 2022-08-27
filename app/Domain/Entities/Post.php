@@ -2,7 +2,6 @@
 
 namespace App\Domain\Entities;
 
-use App\Domain\Entities\Values\Post\Status;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use JetBrains\PhpStorm\Pure;
@@ -64,6 +63,16 @@ class Post extends DomainEntity
             'createdAt' => $createdAt,
             'updatedAt' => $updatedAt,
         ]);
+    }
+
+    /**
+     * コメント数が上限に達しているかどうかを返す
+     *
+     * @return bool
+     */
+    public function hasFullComment()
+    {
+        return count($this->comments) >= 10;
     }
 
     public function __get($key)

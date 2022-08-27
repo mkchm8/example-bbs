@@ -9,7 +9,7 @@
 
 @isset($posts)
     @foreach ($posts as $post)
-        <h2>Title: {{ $post->title }}</h2>
+        <h2>Title: @if($post->hasFullComment()){{ $post->title }}@else<a href="{{ route('web.post.comment.create', [$post->id]) }}">{{ $post->title }}</a>@endif&nbsp;投稿日時:&nbsp;{{ $post->createdAt->format('Y/m/d H:i:s') }}</h2>
         {{ $post->body }}<br>
         @foreach($post->comments as $comment)
             {{ $comment->title }}
