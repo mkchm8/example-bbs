@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Web\Comment;
 
+use App\Domain\Entities\Comment;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
@@ -11,11 +12,11 @@ class StoreRequest extends FormRequest
         return [
             'title' => [
                 'required',
-                'max:20'
+                'max:' . Comment::TITLE_MAX_LENGTH,
             ],
             'body' => [
                 'required',
-                'max:1000',
+                'max:' . Comment::MAX_LENGTH,
             ],
         ];
     }

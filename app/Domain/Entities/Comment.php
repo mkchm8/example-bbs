@@ -11,6 +11,9 @@ class Comment extends DomainEntity
     const APPROVED = 1;
     const REJECTED = 2;
 
+    const TITLE_MAX_LENGTH = 20;
+    const MAX_LENGTH = 300;
+
     protected int $id;
     protected int $postId;
     protected string $title;
