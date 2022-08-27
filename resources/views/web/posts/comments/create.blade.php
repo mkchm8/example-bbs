@@ -21,7 +21,9 @@
 @if($post->hasFullComment())
     <div>コメント数が上限に達しているため、これ以上コメントできません</div>
 @endif
-
+@foreach($errors->all() as $error)
+  {{ $error }}
+@endforeach
 <h2>Title: {{ $post->title }}&nbsp;投稿日時:&nbsp;{{ $post->createdAt->format('Y/m/d H:i:s') }}</h2>
 {{ $post->body }}<br>
 @foreach($post->comments as $comment)

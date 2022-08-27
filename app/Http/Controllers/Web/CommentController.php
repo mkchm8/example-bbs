@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Exceptions\Domain\LimitException;
+use App\Http\Requests\Web\Comment\StoreRequest;
 use App\Usecases\CommentApplicationService;
 use App\Usecases\PostApplicationService;
 use Illuminate\Http\Request;
@@ -20,11 +21,11 @@ class CommentController extends WebBaseController
     }
 
     /**
-     * @param Request $request
+     * @param StoreRequest $request
      * @param CommentApplicationService $commentApplicationService
      * @return RedirectResponse
      */
-    public function store(Request $request, CommentApplicationService $commentApplicationService): RedirectResponse
+    public function store(StoreRequest $request, CommentApplicationService $commentApplicationService): RedirectResponse
     {
         $postId = (int) $request->route('post_id');
         $inputs = $request->only(['title', 'body']);
