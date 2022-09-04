@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 
 class PostRepository implements PostRepositoryInterface
 {
+    // TODO: Postだとわかりにくいので、EloquentをuseするようにしてEloquent\Post に修正する
     protected Post $post;
 
     /**
@@ -23,6 +24,7 @@ class PostRepository implements PostRepositoryInterface
     /**
      * 投稿リストをコメント付きで取得する
      * TODO: ステータス以外でも絞り込みできるようにする
+     * TODO: $conditions がチェックされていない。名前付き引数に変更するか引数自体をオブジェクト化して契約に基づいた作りにする。
      *
      * @param array $conditions
      * @return Collection
@@ -54,6 +56,7 @@ class PostRepository implements PostRepositoryInterface
     /**
      * 投稿をコメント付きで取得する
      * TODO: ステータス以外でも絞り込みできるようにする
+     * TODO: $conditions がチェックされていないので、名前付き引数で個別に受け取るように変更するか$conditionsを丸ごとオブジェクト化するなりして契約に基づいた作りにする（後者は名前付き引数が使えなかった頃の次善の策という感じがするので、前者が良さそう）
      *
      * @param int $postId
      * @param ?array $conditions
@@ -82,6 +85,8 @@ class PostRepository implements PostRepositoryInterface
 
     /**
      * 投稿のEloquentモデルをドメインエンティティに変換する
+     * TODO: 名前と実態が乖離しているので修正する（Entityに変換すると言いつつ、CollectionにEntityをpushしている）
+     * TODO: 実装箇所はここではない気がしている。変換用のクラスを作る？
      *
      * @param Post $post
      * @param Collection $postEntityCollection
@@ -111,6 +116,8 @@ class PostRepository implements PostRepositoryInterface
 
     /**
      * コメントのEloquentモデルをドメインエンティティに変換する
+     * TODO: 名前と実態が乖離しているので修正する（Entityに変換すると言いつつ、CollectionにEntityをpushしている
+     * TODO: 実装箇所はここではない気がしている。変換用のクラスを作る？
      *
      * @param Comment $comment
      * @param Collection $commentEntityCollection

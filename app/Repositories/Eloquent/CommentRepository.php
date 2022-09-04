@@ -16,6 +16,7 @@ class CommentRepository implements CommentRepositoryInterface
     }
 
     /**
+     * TODO: Commentエンティティを返すようにする
      * @param int $postId
      * @param string $title
      * @param string $body

@@ -26,6 +26,7 @@ class CommentApplicationService
 
     /**
      * コメントを投稿する
+     * TODO: 利便性とテスタビリティを考慮し、登録完了時にCommentEntityを返すように変更する
      *
      * @throws LimitException
      */
