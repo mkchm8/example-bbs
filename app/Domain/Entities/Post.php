@@ -12,8 +12,6 @@ class Post extends DomainEntity
     const APPROVED = 1;
     const REJECTED = 2;
 
-    private static Post $post;
-
     protected int $id;
     protected string $title;
     protected string $body;
