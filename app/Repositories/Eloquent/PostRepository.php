@@ -87,7 +87,7 @@ class PostRepository implements PostRepositoryInterface
      * @param Collection $postEntityCollection
      * @param Collection $commentEntityCollection
      */
-    private function toPostDomainEntity(Post $post, Collection $postEntityCollection, Collection $commentEntityCollection)
+    protected function toPostDomainEntity(Post $post, Collection $postEntityCollection, Collection $commentEntityCollection)
     {
         /** @var Post $post */
         $comments = collect();
@@ -115,7 +115,7 @@ class PostRepository implements PostRepositoryInterface
      * @param Comment $comment
      * @param Collection $commentEntityCollection
      */
-    private function toCommentDomainEntity(Comment $comment, Collection $commentEntityCollection)
+    protected function toCommentDomainEntity(Comment $comment, Collection $commentEntityCollection)
     {
         $commentEntity = Entities\Comment::reConstruct(
             $comment->getAttribute('id'),

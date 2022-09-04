@@ -2,6 +2,7 @@
 
 namespace App\DataAccess\Eloquent;
 
+use Database\Factories\CommentFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,5 +33,13 @@ class Comment extends EloquentModel
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
+    }
+
+    /**
+     * @return CommentFactory
+     */
+    protected static function newFactory(): CommentFactory
+    {
+        return CommentFactory::new();
     }
 }
