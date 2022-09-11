@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Domains\Comment;
+namespace App\Domain\Enums\Comment;
 
 enum Status: int
 {

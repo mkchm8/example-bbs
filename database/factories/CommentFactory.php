@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\DataAccess\Eloquent;
 use App\Domain\Entities;
-use App\Enums\Domains\Comment\Status;
+use App\Domain\Enums\Comment\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
