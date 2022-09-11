@@ -8,13 +8,25 @@ use JetBrains\PhpStorm\Pure;
 
 class Comment extends DomainEntity
 {
+    /** @var int タイトル文字数上限 */
     const TITLE_MAX_LENGTH = 20;
+
+    /** @var int 本文文字数上限 */
     const MAX_LENGTH = 300;
 
+    /** @var int  */
     protected int $id;
+
+    /** @var int  */
     protected int $postId;
+
+    /** @var string  */
     protected string $title;
+
+    /** @var string  */
     protected string $body;
+
+    /** @var string  */
     protected string $status;
 
     /**
@@ -62,47 +74,51 @@ class Comment extends DomainEntity
         ]);
     }
 
-    public function __get($key)
+    /**
+     * @param string $key
+     * @return mixed
+     */
+    public function __get(string $key): mixed
     {
         return $this->$key;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getPostId()
+    public function getPostId(): int
     {
         return $this->postId;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         return $this->body;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }

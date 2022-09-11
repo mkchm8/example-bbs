@@ -8,8 +8,12 @@ use App\DataAccess\Eloquent;
 
 class CommentRepository implements CommentRepositoryInterface
 {
+    /** @var Eloquent\Comment  */
     protected Eloquent\Comment $commentEloquent;
 
+    /**
+     * @param Eloquent\Comment $commentEloquent
+     */
     public function __construct(Eloquent\Comment $commentEloquent)
     {
         $this->commentEloquent = $commentEloquent;

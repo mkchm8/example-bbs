@@ -12,12 +12,25 @@ class Post extends DomainEntity
     /** @var int コメント数上限 */
     const COMMENT_COUNT_LIMIT = 10;
 
+    /** @var int $id */
     protected int $id;
+
+    /** @var string $title */
     protected string $title;
+
+    /** @var string $body */
     protected string $body;
+
+    /** @var int $status */
     protected int $status;
+
+    /** @var Collection $comments */
     protected Collection $comments;
+
+    /** @var Carbon $createdAt */
     protected Carbon $createdAt;
+
+    /** @var Carbon $updatedAt */
     protected Carbon $updatedAt;
 
     /**
@@ -73,56 +86,48 @@ class Post extends DomainEntity
         return count($this->comments) >= self::COMMENT_COUNT_LIMIT;
     }
 
-    public function __get($key)
+    public function __get(string $key)
     {
         return $this->$key;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         return $this->body;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
 
     /**
-     * @return mixed
+     * @return Collection CommentエンティティのCollection
      */
-    public function getComments()
+    public function getComments(): Collection
     {
         return $this->comments;
-    }
-
-    /**
-     * @param mixed $comments
-     */
-    public function setComments($comments): void
-    {
-        $this->comments = $comments;
     }
 }
