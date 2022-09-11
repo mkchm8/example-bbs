@@ -2,10 +2,11 @@
 
 namespace App\Usecases;
 
-use App\Domain\Entities\Comment;
 use App\Domain\Entities\Post;
 use App\Repositories\PostRepositoryInterface;
 use Illuminate\Support\Collection;
+use App\Domain\Enums\Post\Status as PostStatus;
+use App\Domain\Enums\Comment\Status as CommentStatus;
 
 class PostApplicationService
 {
@@ -41,8 +42,8 @@ class PostApplicationService
     public function getApprovedListWithComments(): Collection
     {
         return $this->postRepository->findListWithComments([
-            'postStatus' => Post::APPROVED,
-            'commentStatus' => Comment::APPROVED,
+            'postStatus' => PostStatus::Approved->value,
+            'commentStatus' => CommentStatus::Approved->value,
         ]);
     }
 
@@ -56,7 +57,7 @@ class PostApplicationService
     {
          return $this->postRepository->findByIdWithComments(
              $postId,
-             ['commentStatus' => Comment::APPROVED]
+             ['commentStatus' => CommentStatus::Approved->value]
          );
     }
 }

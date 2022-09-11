@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Domains\Post;
+namespace App\Domain\Enums\Post;
 
 enum Status: int
 {

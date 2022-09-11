@@ -2,15 +2,15 @@
 
 namespace App\Domain\Entities;
 
+use App\Domain\Enums\Post\Status;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use JetBrains\PhpStorm\Pure;
 
 class Post extends DomainEntity
 {
-    const UNAPPROVED = 0;
-    const APPROVED = 1;
-    const REJECTED = 2;
+    /** @var int コメント数上限 */
+    const COMMENT_COUNT_LIMIT = 10;
 
     protected int $id;
     protected string $title;
@@ -32,7 +32,7 @@ class Post extends DomainEntity
         return new Post([
             'title' => $title,
             'body' => $body,
-            'status' => self::UNAPPROVED,
+            'status' => Status::Unapproved,
             'createdAt' => Carbon::now(),
             'updatedAt' => Carbon::now(),
         ]);
@@ -70,7 +70,7 @@ class Post extends DomainEntity
      */
     public function hasFullComment()
     {
-        return count($this->comments) >= 10;
+        return count($this->comments) >= self::COMMENT_COUNT_LIMIT;
     }
 
     public function __get($key)

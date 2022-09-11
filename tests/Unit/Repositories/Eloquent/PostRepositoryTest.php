@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Repositories\Eloquent;
 
-use App\Domain\Entities;
 use App\Repositories\Eloquent\PostRepository;
 use App\Repositories\PostRepositoryInterface;
 use Faker\Factory;
@@ -13,6 +12,7 @@ use Illuminate\Foundation\Testing\TestCase;
 use Mockery as m;
 use Mockery\MockInterface as i;
 use App\DataAccess\Eloquent;
+use App\Domain\Enums;
 
 class PostRepositoryTest extends TestCase
 {
@@ -53,7 +53,7 @@ class PostRepositoryTest extends TestCase
             ->count(2)
             ->make([
                 'id' => $postId,
-                'status' => Entities\Post::APPROVED,
+                'status' => Enums\Post\Status::Approved->value,
                 'comments' => Eloquent\Comment::factory([
                     'post_id' => $postId
                 ])->count(3)->make(),

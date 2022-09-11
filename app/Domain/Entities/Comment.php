@@ -2,15 +2,12 @@
 
 namespace App\Domain\Entities;
 
+use App\Domain\Enums\Comment\Status;
 use Illuminate\Support\Carbon;
 use JetBrains\PhpStorm\Pure;
 
 class Comment extends DomainEntity
 {
-    const UNAPPROVED = 0;
-    const APPROVED = 1;
-    const REJECTED = 2;
-
     const TITLE_MAX_LENGTH = 20;
     const MAX_LENGTH = 300;
 
@@ -34,7 +31,7 @@ class Comment extends DomainEntity
             'postId' => $postId,
             'title' => $title,
             'body' => $body,
-            'status' => self::UNAPPROVED,
+            'status' => Status::Unapproved->value,
             'createdAt' => Carbon::now(),
             'updatedAt' => Carbon::now(),
         ]);
