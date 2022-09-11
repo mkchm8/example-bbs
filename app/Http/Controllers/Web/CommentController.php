@@ -12,6 +12,11 @@ use Illuminate\Http\RedirectResponse;
 
 class CommentController extends WebBaseController
 {
+    /**
+     * @param Request $request
+     * @param PostApplicationService $postApplicationService
+     * @return View
+     */
     public function create(Request $request, PostApplicationService $postApplicationService): View
     {
         $postId = (int) $request->route('post_id');
