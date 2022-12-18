@@ -38,17 +38,27 @@ class PostRepository implements PostRepositoryInterface
             ->filterStatus($conditions['postStatus'])
             ->get();
 
-        $postEntityCollection = collect();
-        foreach ($posts as $post) {
-            $comments = $post->comments;
-
-            $commentEntityCollection = collect();
-            foreach ($comments as $comment) {
-                $this->toCommentDomainEntity($comment, $commentEntityCollection);
-            }
-
-            $this->toPostDomainEntity($post, $postEntityCollection, $commentEntityCollection);
-        }
+        $postEntityCollection = $posts->map(
+            fn(Post $post) => Entities\Post::reConstruct(
+                $post->id,
+                $post->title,
+                $post->body,
+                $post->status,
+                $post->comments->map(
+                    fn(Comment $comment) => Entities\Comment::reConstruct(
+                        $comment->id,
+                        $comment->post_id,
+                        $comment->title,
+                        $comment->body,
+                        $comment->status,
+                        $comment->created_at,
+                        $comment->updated_at,
+                    )
+                ),
+                $post->created_at,
+                $post->updated_at,
+            )
+        );
 
         return $postEntityCollection;
     }
@@ -64,23 +74,38 @@ class PostRepository implements PostRepositoryInterface
      */
     public function findByIdWithComments(int $postId, ?array $conditions = null): Entities\Post
     {
-        $post = $this->post::with([
+        $posts = $this->post::with([
             'comments' => function ($query) use ($conditions) {
-                if (isset($conditions['commentStatus'])) {
-                    $query->filterStatus($conditions['commentStatus']);
-                }
-            }])->get()->find($postId);
-        $comments = $post->comments;
+                $query->when($conditions['commentStatus'], function ($query, $commentStatus) {
+                   $query->where('status', $commentStatus);
+                });
+            }])
+            ->where('id', $postId)
+            ->get();
 
-        $postEntityCollection = collect();
-        $commentEntityCollection = collect();
-        foreach ($comments as $comment) {
-            $this->toCommentDomainEntity($comment, $commentEntityCollection);
-        }
+        $postEntity = $posts->map(
+            fn(Post $post) => Entities\Post::reConstruct(
+                $post->id,
+                $post->title,
+                $post->body,
+                $post->status,
+                $post->comments->map(
+                    fn(Comment $comment) => Entities\Comment::reConstruct(
+                        $comment->id,
+                        $comment->post_id,
+                        $comment->title,
+                        $comment->body,
+                        $comment->status,
+                        $comment->created_at,
+                        $comment->updated_at,
+                    )
+                ),
+                $post->created_at,
+                $post->updated_at,
+            )
+        )->first();
 
-        $this->toPostDomainEntity($post, $postEntityCollection, $commentEntityCollection);
-
-        return $postEntityCollection->first();
+        return $postEntity;
     }
 
     /**
