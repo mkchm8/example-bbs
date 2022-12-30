@@ -24,16 +24,11 @@ class PostFactory extends Factory
     public function definition()
     {
         $faker = \Faker\Factory::create();
-        $id = $faker->unique()->randomDigitNotZero();
 
         return [
-            'id' => $id,
             'title' => $faker->realText(30),
             'body' => $faker->realText(300),
             'status' => $faker->randomElement(Status::toArray()),
-            'comments' => Eloquent\Comment::factory(['post_id' => $id])->count(3)->make(),
-            'created_at' => $faker->dateTime(),
-            'updated_at' => $faker->dateTime(),
         ];
     }
 }
