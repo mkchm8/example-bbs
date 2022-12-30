@@ -14,20 +14,15 @@ class Comment extends DomainEntity
     /** @var int 本文文字数上限 */
     const MAX_LENGTH = 300;
 
-    /** @var int  */
-    protected int $id;
-
-    /** @var int  */
-    protected int $postId;
-
-    /** @var string  */
-    protected string $title;
-
-    /** @var string  */
-    protected string $body;
-
-    /** @var string  */
-    protected string $status;
+    public function __construct(
+        public readonly ?int $id,
+        public readonly int $postId,
+        public readonly string $title,
+        public readonly string $body,
+        public readonly int $status,
+        public readonly Carbon $createdAt,
+        public readonly Carbon $updatedAt,
+    ) {}
 
     /**
      * 新規のコメントを作成する
@@ -39,14 +34,15 @@ class Comment extends DomainEntity
      */
     public static function create(int $postId, string $title, string $body): Comment
     {
-        return new Comment([
-            'postId' => $postId,
-            'title' => $title,
-            'body' => $body,
-            'status' => Status::Unapproved->value,
-            'createdAt' => Carbon::now(),
-            'updatedAt' => Carbon::now(),
-        ]);
+        return new self(
+            id: null,
+            postId: $postId,
+            title:  $title,
+            body:  $body,
+            status:  Status::Unapproved->value,
+            createdAt:  Carbon::now(),
+            updatedAt:  Carbon::now(),
+        );
     }
 
     /**
@@ -63,15 +59,15 @@ class Comment extends DomainEntity
      */
     #[Pure] public static function reConstruct(int $id, int $postId, string $title, string $body, int $status, Carbon $createdAt, Carbon $updatedAt): Comment
     {
-        return new Comment([
-            'id' => $id,
-            'postId' => $postId,
-            'title' => $title,
-            'body' => $body,
-            'status' => $status,
-            'createdAt' => $createdAt,
-            'updatedAt' => $updatedAt,
-        ]);
+        return new self(
+            id: $id,
+            postId: $postId,
+            title:  $title,
+            body:  $body,
+            status:  $status,
+            createdAt:  $createdAt,
+            updatedAt:  $updatedAt,
+        );
     }
 
     /**

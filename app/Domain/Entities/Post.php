@@ -12,26 +12,15 @@ class Post extends DomainEntity
     /** @var int コメント数上限 */
     const COMMENT_COUNT_LIMIT = 10;
 
-    /** @var int $id */
-    protected int $id;
-
-    /** @var string $title */
-    protected string $title;
-
-    /** @var string $body */
-    protected string $body;
-
-    /** @var int $status */
-    protected int $status;
-
-    /** @var Collection $comments */
-    protected Collection $comments;
-
-    /** @var Carbon $createdAt */
-    protected Carbon $createdAt;
-
-    /** @var Carbon $updatedAt */
-    protected Carbon $updatedAt;
+    public function __construct(
+        public readonly ?int $id,
+        public readonly string $title,
+        public readonly string $body,
+        public readonly int $status,
+        public readonly ?Collection $comments,
+        public readonly Carbon $createdAt,
+        public readonly Carbon $updatedAt,
+    ) {}
 
     /**
      * 新規の投稿を作成する
@@ -42,13 +31,15 @@ class Post extends DomainEntity
      */
     public static function create(string $title, string $body): Post
     {
-        return new Post([
-            'title' => $title,
-            'body' => $body,
-            'status' => Status::Unapproved,
-            'createdAt' => Carbon::now(),
-            'updatedAt' => Carbon::now(),
-        ]);
+        return new self(
+            id: null,
+            title: $title,
+            body: $body,
+            status: Status::Unapproved->value,
+            comments: null,
+            createdAt: Carbon::now(),
+            updatedAt: Carbon::now(),
+        );
     }
 
     /**
@@ -65,15 +56,15 @@ class Post extends DomainEntity
      */
     #[Pure] public static function reConstruct(int $id, string $title, string $body, int $status, Collection $comments, Carbon $createdAt, Carbon $updatedAt): Post
     {
-        return new Post([
-            'id' => $id,
-            'title' => $title,
-            'body' => $body,
-            'status' => $status,
-            'comments' => $comments,
-            'createdAt' => $createdAt,
-            'updatedAt' => $updatedAt,
-        ]);
+        return new self(
+            id: $id,
+            title: $title,
+            body: $body,
+            status: $status,
+            comments: $comments,
+            createdAt: $createdAt,
+            updatedAt: $updatedAt,
+        );
     }
 
     /**
@@ -124,7 +115,7 @@ class Post extends DomainEntity
     }
 
     /**
-     * @return Collection CommentエンティティのCollection
+     * @return Collection<Comment>
      */
     public function getComments(): Collection
     {
