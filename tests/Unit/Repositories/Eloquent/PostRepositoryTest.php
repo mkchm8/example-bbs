@@ -6,7 +6,6 @@ use App\Domain\Entities\Comment;
 use App\Domain\Entities\Post;
 use App\Repositories\Eloquent\PostRepository;
 use App\Repositories\PostRepositoryInterface;
-use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use App\DataAccess\Eloquent;
