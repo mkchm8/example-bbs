@@ -38,17 +38,27 @@ class PostRepository implements PostRepositoryInterface
             ->filterStatus($conditions['postStatus'])
             ->get();
 
-        $postEntityCollection = collect();
-        foreach ($posts as $post) {
-            $comments = $post->comments;
-
-            $commentEntityCollection = collect();
-            foreach ($comments as $comment) {
-                $this->toCommentDomainEntity($comment, $commentEntityCollection);
-            }
-
-            $this->toPostDomainEntity($post, $postEntityCollection, $commentEntityCollection);
-        }
+        $postEntityCollection = $posts->map(
+            fn(Post $post) => Entities\Post::reConstruct(
+                $post->id,
+                $post->title,
+                $post->body,
+                $post->status,
+                $post->comments->map(
+                    fn(Comment $comment) => Entities\Comment::reConstruct(
+                        $comment->id,
+                        $comment->post_id,
+                        $comment->title,
+                        $comment->body,
+                        $comment->status,
+                        $comment->created_at,
+                        $comment->updated_at,
+                    )
+                ),
+                $post->created_at,
+                $post->updated_at,
+            )
+        );
 
         return $postEntityCollection;
     }
@@ -64,75 +74,37 @@ class PostRepository implements PostRepositoryInterface
      */
     public function findByIdWithComments(int $postId, ?array $conditions = null): Entities\Post
     {
-        $post = $this->post::with([
+        $posts = $this->post::with([
             'comments' => function ($query) use ($conditions) {
-                if (isset($conditions['commentStatus'])) {
-                    $query->filterStatus($conditions['commentStatus']);
-                }
-            }])->get()->find($postId);
-        $comments = $post->comments;
+                $query->when($conditions['commentStatus'], function ($query, $commentStatus) {
+                   $query->where('status', $commentStatus);
+                });
+            }])
+            ->where('id', $postId)
+            ->get();
 
-        $postEntityCollection = collect();
-        $commentEntityCollection = collect();
-        foreach ($comments as $comment) {
-            $this->toCommentDomainEntity($comment, $commentEntityCollection);
-        }
+        $postEntity = $posts->map(
+            fn(Post $post) => Entities\Post::reConstruct(
+                $post->id,
+                $post->title,
+                $post->body,
+                $post->status,
+                $post->comments->map(
+                    fn(Comment $comment) => Entities\Comment::reConstruct(
+                        $comment->id,
+                        $comment->post_id,
+                        $comment->title,
+                        $comment->body,
+                        $comment->status,
+                        $comment->created_at,
+                        $comment->updated_at,
+                    )
+                ),
+                $post->created_at,
+                $post->updated_at,
+            )
+        )->first();
 
-        $this->toPostDomainEntity($post, $postEntityCollection, $commentEntityCollection);
-
-        return $postEntityCollection->first();
-    }
-
-    /**
-     * 投稿のEloquentモデルをドメインエンティティに変換する
-     * TODO: 名前と実態が乖離しているので修正する（Entityに変換すると言いつつ、CollectionにEntityをpushしている）
-     * TODO: 実装箇所はここではない気がしている。変換用のクラスを作る？
-     *
-     * @param Post $post
-     * @param Collection $postEntityCollection
-     * @param Collection $commentEntityCollection
-     */
-    protected function toPostDomainEntity(Post $post, Collection $postEntityCollection, Collection $commentEntityCollection)
-    {
-        /** @var Post $post */
-        $comments = collect();
-        foreach ($commentEntityCollection as $commentEntity) {
-            if ($post->getAttribute('id') == $commentEntity->getPostId()) {
-                $comments = $commentEntityCollection;
-            }
-        }
-
-        $postEntity = Entities\Post::reConstruct(
-            $post->getAttribute('id'),
-            $post->getAttribute('title'),
-            $post->getAttribute('body'),
-            $post->getAttribute('status'),
-            $comments,
-            $post->getAttribute('created_at'),
-            $post->getAttribute('updated_at'),
-        );
-        $postEntityCollection->push($postEntity);
-    }
-
-    /**
-     * コメントのEloquentモデルをドメインエンティティに変換する
-     * TODO: 名前と実態が乖離しているので修正する（Entityに変換すると言いつつ、CollectionにEntityをpushしている
-     * TODO: 実装箇所はここではない気がしている。変換用のクラスを作る？
-     *
-     * @param Comment $comment
-     * @param Collection $commentEntityCollection
-     */
-    protected function toCommentDomainEntity(Comment $comment, Collection $commentEntityCollection)
-    {
-        $commentEntity = Entities\Comment::reConstruct(
-            $comment->getAttribute('id'),
-            $comment->getAttribute('post_id'),
-            $comment->getAttribute('title'),
-            $comment->getAttribute('body'),
-            $comment->getAttribute('status'),
-            $comment->getAttribute('created_at'),
-            $comment->getAttribute('updated_at'),
-        );
-        $commentEntityCollection->push($commentEntity);
+        return $postEntity;
     }
 }

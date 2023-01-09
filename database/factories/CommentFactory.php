@@ -24,13 +24,10 @@ class CommentFactory extends Factory
         $faker = \Faker\Factory::create();
 
         return [
-            'id' => $faker->unique()->randomDigitNotZero(),
             'post_id' => $faker->unique()->randomDigitNotZero(),
             'title' => $faker->realText(Entities\Comment::TITLE_MAX_LENGTH),
             'body' => $faker->realText(Entities\Comment::MAX_LENGTH),
             'status' => $faker->randomElement(Status::toArray()),
-            'created_at' => $faker->dateTime(),
-            'updated_at' => $faker->dateTime(),
         ];
     }
 }
