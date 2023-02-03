@@ -57,7 +57,7 @@ class Comment extends DomainEntity
      * @param Carbon $updatedAt
      * @return Comment
      */
-    #[Pure] public static function reConstruct(int $id, int $postId, string $title, string $body, int $status, Carbon $createdAt, Carbon $updatedAt): Comment
+    public static function reConstruct(int $id, int $postId, string $title, string $body, int $status, Carbon $createdAt, Carbon $updatedAt): Comment
     {
         return new self(
             id: $id,

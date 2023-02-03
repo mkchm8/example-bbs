@@ -54,7 +54,7 @@ class Post extends DomainEntity
      * @param Carbon $updatedAt
      * @return Post
      */
-    #[Pure] public static function reConstruct(int $id, string $title, string $body, int $status, Collection $comments, Carbon $createdAt, Carbon $updatedAt): Post
+    public static function reConstruct(int $id, string $title, string $body, int $status, Collection $comments, Carbon $createdAt, Carbon $updatedAt): Post
     {
         return new self(
             id: $id,
