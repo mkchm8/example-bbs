@@ -10,7 +10,7 @@ use JetBrains\PhpStorm\Pure;
 class Post extends DomainEntity
 {
     /** @var int コメント数上限 */
-    const COMMENT_COUNT_LIMIT = 10;
+    public const COMMENT_COUNT_LIMIT = 10;
 
     public function __construct(
         public readonly ?int $id,
@@ -55,8 +55,15 @@ class Post extends DomainEntity
      * @param Carbon $updatedAt
      * @return Post
      */
-    public static function reConstruct(int $id, string $title, string $body, int $status, Collection $comments, Carbon $createdAt, Carbon $updatedAt): Post
-    {
+    public static function reConstruct(
+        int $id,
+        string $title,
+        string $body,
+        int $status,
+        Collection $comments,
+        Carbon $createdAt,
+        Carbon $updatedAt
+    ): Post {
         return new self(
             id: $id,
             title: $title,
