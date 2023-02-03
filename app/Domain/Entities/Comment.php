@@ -22,7 +22,8 @@ class Comment extends DomainEntity
         public readonly int $status,
         public readonly Carbon $createdAt,
         public readonly Carbon $updatedAt,
-    ) {}
+    ) {
+    }
 
     /**
      * 新規のコメントを作成する

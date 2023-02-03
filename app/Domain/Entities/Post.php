@@ -20,7 +20,8 @@ class Post extends DomainEntity
         public readonly ?Collection $comments,
         public readonly Carbon $createdAt,
         public readonly Carbon $updatedAt,
-    ) {}
+    ) {
+    }
 
     /**
      * 新規の投稿を作成する

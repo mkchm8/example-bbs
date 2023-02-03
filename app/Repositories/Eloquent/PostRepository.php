@@ -77,7 +77,7 @@ class PostRepository implements PostRepositoryInterface
         $posts = $this->post::with([
             'comments' => function ($query) use ($conditions) {
                 $query->when($conditions['commentStatus'], function ($query, $commentStatus) {
-                   $query->where('status', $commentStatus);
+                    $query->where('status', $commentStatus);
                 });
             }])
             ->where('id', $postId)
