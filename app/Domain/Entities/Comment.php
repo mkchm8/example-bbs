@@ -9,10 +9,10 @@ use JetBrains\PhpStorm\Pure;
 class Comment extends DomainEntity
 {
     /** @var int タイトル文字数上限 */
-    const TITLE_MAX_LENGTH = 20;
+    public const TITLE_MAX_LENGTH = 20;
 
     /** @var int 本文文字数上限 */
-    const MAX_LENGTH = 300;
+    public const MAX_LENGTH = 300;
 
     public function __construct(
         public readonly ?int $id,
@@ -22,7 +22,8 @@ class Comment extends DomainEntity
         public readonly int $status,
         public readonly Carbon $createdAt,
         public readonly Carbon $updatedAt,
-    ) {}
+    ) {
+    }
 
     /**
      * 新規のコメントを作成する
@@ -57,8 +58,15 @@ class Comment extends DomainEntity
      * @param Carbon $updatedAt
      * @return Comment
      */
-    public static function reConstruct(int $id, int $postId, string $title, string $body, int $status, Carbon $createdAt, Carbon $updatedAt): Comment
-    {
+    public static function reConstruct(
+        int $id,
+        int $postId,
+        string $title,
+        string $body,
+        int $status,
+        Carbon $createdAt,
+        Carbon $updatedAt
+    ): Comment {
         return new self(
             id: $id,
             postId: $postId,
