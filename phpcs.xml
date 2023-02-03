@@ -2,10 +2,15 @@
 <ruleset name="PSR12">
   <arg name="extensions" value="php" />
   <rule ref="PSR12" />
+  <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+    <exclude-pattern>tests/</exclude-pattern>
+  </rule>
   <arg value="sp" />
   <arg name="colors"/>
   <file>./</file>
   <exclude-pattern>resources/</exclude-pattern>
   <exclude-pattern>storage/</exclude-pattern>
   <exclude-pattern>vendor/</exclude-pattern>
+  <exclude-pattern>bootstrap/</exclude-pattern>
+  <exclude-pattern>public/</exclude-pattern>
 </ruleset>
