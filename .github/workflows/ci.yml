@@ -1,8 +1,8 @@
-name: learn-github-actions
+name: test
 on: [ push, pull_request ]
 
 jobs:
-  test:
+  SetUp:
     runs-on: ubuntu-latest
     steps:
       - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
@@ -23,5 +23,9 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache
       - name: wait for mysql to start
         run: sleep 60
+  PHPUnit:
+    runs-on: ubuntu-latest
+    needs: SetUp
+    steps:
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: ./vendor/bin/sail php artisan test
