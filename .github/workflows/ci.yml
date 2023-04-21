@@ -25,3 +25,7 @@ jobs:
         run: sleep 60
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: ./vendor/bin/sail php artisan test
+      - name: Execute PHPCS
+        run: ./vendor/bin/phpcs --standard=phpcs.xml
+      - name: Execute PHPStan
+        run: ./vendor/bin/phpstan analyse app -l 2
