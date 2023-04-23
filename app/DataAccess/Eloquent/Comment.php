@@ -3,10 +3,20 @@
 namespace App\DataAccess\Eloquent;
 
 use Database\Factories\CommentFactory;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property integer $id
+ * @property integer $post_id
+ * @property string $title
+ * @property string $body
+ * @property string $status
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 class Comment extends EloquentModel
 {
     use HasFactory;
