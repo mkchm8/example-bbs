@@ -2,11 +2,21 @@
 
 namespace App\DataAccess\Eloquent;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Database\Factories\PostFactory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property integer $id
+ * @property string $title
+ * @property string $body
+ * @property string $status
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Collection<Comment> $comments
+ */
 class Post extends EloquentModel
 {
     use HasFactory;
@@ -15,17 +25,6 @@ class Post extends EloquentModel
      * @var string[]
      */
     protected $fillable = ['status'];
-
-    /**
-     * @param Builder $builder
-     * @param int $status
-     *
-     * @return Builder
-     */
-    public function scopeFilterStatus(Builder $builder, int $status): Builder
-    {
-        return $builder->where('status', $status);
-    }
 
     /**
      * @return HasMany

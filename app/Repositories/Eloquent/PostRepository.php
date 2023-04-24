@@ -33,9 +33,9 @@ class PostRepository implements PostRepositoryInterface
     {
         $posts = $this->post::with([
             'comments' => function ($query) use ($conditions) {
-                $query->filterStatus($conditions['commentStatus']);
+                $query->where('status', $conditions['commentStatus']);
             }])
-            ->filterStatus($conditions['postStatus'])
+            ->where('status', $conditions['postStatus'])
             ->get();
 
         $postEntityCollection = $posts->map(
