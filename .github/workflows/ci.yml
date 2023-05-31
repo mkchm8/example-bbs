@@ -21,7 +21,7 @@ jobs:
         run: chmod -R 775 storage bootstrap/cache
       - name: Wait for MySQL to start
         run: |
-          until docker exec example-bbs-mysql-1 mysql -e 'SELECT 1' > /dev/null 2>&1; do
+          until docker exec example-bbs-mysql-1 mysql -e 'SELECT 1' -usail --password=${{ vars.TESTING_DB_PASSWORD }} > /dev/null 2>&1; do
             echo "Waiting for MySQL to start..."
             sleep 5
           done
