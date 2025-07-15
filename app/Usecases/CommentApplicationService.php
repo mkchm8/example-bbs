@@ -26,7 +26,6 @@ class CommentApplicationService
 
     /**
      * コメントを投稿する
-     * TODO: 利便性とテスタビリティを考慮し、登録完了時にCommentEntityを返すように変更する
      *
      * @throws LimitException
      */
@@ -37,6 +36,6 @@ class CommentApplicationService
             throw new LimitException('コメント数が上限に達しているため、登録できませんでした');
         }
 
-        $this->commentRepository->create($postId, $inputs['title'], $inputs['body']);
+        return $this->commentRepository->create($postId, $inputs['title'], $inputs['body']);
     }
 }
