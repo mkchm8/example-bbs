@@ -20,21 +20,30 @@ class CommentRepository implements CommentRepositoryInterface
     }
 
     /**
-     * TODO: Commentエンティティを返すようにする
      * @param int $postId
      * @param string $title
      * @param string $body
-     * @return void
+     * @return Entities\Comment
      */
-    public function create(int $postId, string $title, string $body): void
+    public function create(int $postId, string $title, string $body): Entities\Comment
     {
         $comment = Entities\Comment::create($postId, $title, $body);
 
-        $this->commentEloquent->newQuery()->create([
+        $eloquentComment = $this->commentEloquent->newQuery()->create([
             'post_id' => $comment->getPostId(),
             'title' => $comment->getTitle(),
             'body' => $comment->getBody(),
             'status' => $comment->getStatus(),
         ]);
+
+        return Entities\Comment::reConstruct(
+            $eloquentComment->id,
+            $eloquentComment->post_id,
+            $eloquentComment->title,
+            $eloquentComment->body,
+            $eloquentComment->status,
+            $eloquentComment->created_at,
+            $eloquentComment->updated_at
+        );
     }
 }

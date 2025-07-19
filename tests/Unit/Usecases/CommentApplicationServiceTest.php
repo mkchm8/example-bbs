@@ -26,6 +26,9 @@ class CommentApplicationServiceTest extends TestCase
     /** @var Entities\Post|i */
     protected Entities\Post|i $post;
 
+    /** @var \Faker\Generator */
+    protected \Faker\Generator $faker;
+
     /**
      * @param string|null $name
      * @param array $data
@@ -34,7 +37,6 @@ class CommentApplicationServiceTest extends TestCase
     public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->faker = Factory::create();
     }
 
     /**
@@ -43,6 +45,7 @@ class CommentApplicationServiceTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->faker = Factory::create();
         $this->postRepository = m::mock(PostRepositoryInterface::class)->makePartial();
         $this->commentRepository = m::mock(CommentRepositoryInterface::class)->makePartial();
         $this->post = m::mock('alias:' . Entities\Post::class)->makePartial();
@@ -61,10 +64,12 @@ class CommentApplicationServiceTest extends TestCase
      */
     public function test_コメント登録OK(int $postId, array $data)
     {
+        $expectedComment = m::mock(Entities\Comment::class);
+
         $this->commentRepository->shouldReceive('create')
             ->once()
             ->with($postId, $data['title'], $data['body'])
-            ->andReturnNull();
+            ->andReturn($expectedComment);
 
         $this->postRepository->shouldReceive('findByIdWithComments')
             ->once()
@@ -75,10 +80,9 @@ class CommentApplicationServiceTest extends TestCase
             ->once()
             ->andReturn(false);
 
-        $this->service->create($postId, $data);
+        $result = $this->service->create($postId, $data);
 
-        // TODO: 例外が発生しないことでテストOKとしているが、利便性とテスタビリティを考慮し、登録完了時にCommentEntityを返すように変更する
-        $this->assertTrue(true);
+        $this->assertSame($expectedComment, $result);
     }
 
     /**
@@ -106,12 +110,13 @@ class CommentApplicationServiceTest extends TestCase
 
     public function provideCommentData()
     {
+        $faker = Factory::create();
         return [
             'ok' => [
-                'postId' => $this->faker->unique()->randomDigitNotNull(),
+                'postId' => $faker->unique()->randomDigitNotNull(),
                 'data' => [
-                    'title' => $this->faker->realText(Entities\Comment::TITLE_MAX_LENGTH),
-                    'body' => $this->faker->realText(Entities\Comment::MAX_LENGTH)
+                    'title' => $faker->realText(Entities\Comment::TITLE_MAX_LENGTH),
+                    'body' => $faker->realText(Entities\Comment::MAX_LENGTH)
                 ],
             ],
         ];
