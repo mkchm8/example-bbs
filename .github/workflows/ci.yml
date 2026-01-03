@@ -26,7 +26,7 @@ jobs:
             sleep 5
           done
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        run: ./vendor/bin/sail php artisan test
+        run: docker exec -w /app example-bbs-laravel.test-1 php artisan test
       - name: Execute PHPCS
         run: ./vendor/bin/phpcs --standard=phpcs.xml
       - name: Execute PHPStan
