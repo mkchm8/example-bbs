@@ -8,6 +8,7 @@ use App\Repositories\CommentRepositoryInterface;
 use App\Repositories\PostRepositoryInterface;
 use App\Usecases\CommentApplicationService;
 use Faker\Factory;
+use Faker\Generator;
 use PHPUnit\Framework\TestCase;
 use Mockery as m;
 use Mockery\MockInterface as i;
@@ -25,6 +26,9 @@ class CommentApplicationServiceTest extends TestCase
 
     /** @var Entities\Post|i */
     protected Entities\Post|i $post;
+
+    /** @var Generator */
+    protected Generator $faker;
 
     /**
      * @param string|null $name
@@ -104,14 +108,15 @@ class CommentApplicationServiceTest extends TestCase
         $this->service->create($postId, $data);
     }
 
-    public function provideCommentData()
+    public function provideCommentData(): array
     {
+        $faker = Factory::create();
         return [
             'ok' => [
-                'postId' => $this->faker->unique()->randomDigitNotNull(),
+                'postId' => $faker->unique()->randomDigitNotNull(),
                 'data' => [
-                    'title' => $this->faker->realText(Entities\Comment::TITLE_MAX_LENGTH),
-                    'body' => $this->faker->realText(Entities\Comment::MAX_LENGTH)
+                    'title' => $faker->realText(Entities\Comment::TITLE_MAX_LENGTH),
+                    'body' => $faker->realText(Entities\Comment::MAX_LENGTH)
                 ],
             ],
         ];
